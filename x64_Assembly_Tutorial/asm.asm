@@ -1,16 +1,22 @@
 .data
 
-arr qword 10 dup(0)
+arr qword 100 dup(0)
 
 .code
 
-conditionalJumpsZ proc
+ASMFunction proc
 	
-	mov rcx, 10
+	mov rcx, 100
 	lea r8, qword ptr [arr]
-	
+	mov r9, 0
+	mov r10, 0
+
 	loopHead:
-		mov [r8], rcx
+
+		inc r9
+		add r10, r9
+		mov [r8], r10
+		
 		add r8, 8
 		dec rcx
 		jnz loopHead
@@ -18,36 +24,6 @@ conditionalJumpsZ proc
 	lea rax, qword ptr [arr]
 	ret
 
-conditionalJumpsZ endp
-
-conditionalJumpsMC proc
-	
-	mov r8, 1
-	mov rax, 0
-	mov r9, -1
-	add r9, 1
-	cmovc rax, r8
-	
-	ret
-
-conditionalJumpsMC endp
-
-conditionalJumpsOF proc
-	
-	mov r8, 135 
-	add r8, 1
-	
-	jo overFlowed
-	jno didntOverFlowed
-
-	overFlowed:
-		mov rax, 1
-
-	didntOverFlowed:
-		mov rax, 0
-	
-	ret
-
-conditionalJumpsOF endp
+ASMFunction endp
 
 end
