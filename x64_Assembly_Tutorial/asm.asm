@@ -1,39 +1,40 @@
 .data
-
-	var qword 0
-
+	var1 qword 0
+	var2 qword 0
 .code
 
-GCD_ASM proc
+ASMfunction1 proc
 	
-	mov r8, rcx
-	mov r9, rdx
+	mov var1, rcx
+	lea rax, qword ptr [var1]
 
-	cmp r8, 0
-	je Finished
-	cmp r9, 0
-	je Finished
-	
-LoopHead:
-	xor rdx, rdx
-	mov r10, r9
-	mov rax, r8
-	div r9 ; r8/r9
-	mov r9, rdx ; Remainder to r9 (r8 % r9)
-	mov r8, r10
-	cmp r9, 0
-	jne LoopHead
-	mov var, r8
-	lea rax, qword ptr [var]
 	ret
 
+ASMfunction1 endp
 
-Finished:
-	mov var, 0
+ASMfunction2 proc
+	
+	mov var2, rdx
+	lea rax, qword ptr [var2]
 
-	lea rax, qword ptr [var]
 	ret
 
-GCD_ASM endp
+ASMfunction2 endp
+
+ASMfunction3 proc
+	
+	mov [r8], rcx
+	mov [r9], rdx
+
+	ret
+
+ASMfunction3 endp
+
+ASMfunction4 proc
+	
+
+	ret
+
+ASMfunction4 endp
 
 end

@@ -1,27 +1,27 @@
 #include <iostream>
 
-extern "C" uint64_t * GCD_ASM(unsigned int a, unsigned int b);
+extern "C" uint64_t * ASMfunction1(unsigned long long var1, unsigned long long var2);
+extern "C" uint64_t * ASMfunction2(unsigned long long var1, unsigned long long var2);
+extern "C" void ASMfunction3(
+	unsigned long long var1, 
+	unsigned long long var2,
+	unsigned long long* ptr1,
+	unsigned long long* ptr2
+);
 
-unsigned int GCD(unsigned int a, unsigned int b)
-{
-    if (a == 0 || b == 0)
-        return 0;
-
-	int temp = 0;
-	while (b != 0)
-	{
-		temp = b;
-		b = a % b;
-		a = temp;
-	}
-
-	return a;
-}
+extern "C" float ASMfunction4(float flt);
 
 int main()
 {
-	std::cout << GCD(57*59, 57*78) << std::endl;
-	std::cout << *(GCD_ASM(57*59, 57*78)) << std::endl;
+	std::cout << *ASMfunction1(123, 456) << std::endl;
+	std::cout << *ASMfunction2(123, 456) << std::endl;
+
+	unsigned long long var1, var2;
+	ASMfunction3(123, 456, &var1, &var2);
+	std::cout << var1 << std::endl;
+	std::cout << var2 << std::endl;
+
+	std::cout << ASMfunction4(123.123f) << std::endl;
 
 	return 0;
 }
