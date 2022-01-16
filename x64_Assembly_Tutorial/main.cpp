@@ -1,82 +1,51 @@
 #include <iostream>
 
-extern "C" uint64_t ASMfunction1(uint64_t a, uint64_t b);
-extern "C" uint64_t ASMfunction2(uint64_t a, uint64_t b);
-uint64_t Cppfunction1(uint64_t a, uint64_t b)
-{	
-	return 1 ? a<b : 0;
-}
-
-extern "C" uint64_t ASMfunction3(uint64_t a, uint64_t b);
-uint64_t Cppfunction3(uint64_t a, uint64_t b)
+struct Point
 {
-	return 1 ? (a == 10 && b == 20) : 0;
-}
+	uint64_t x, y;
+};
 
-extern "C" void ASMfunction4(uint64_t * arr, uint64_t size);
-void Cppfunction4(uint64_t* arr, uint64_t size)
+extern "C" Point * ASMfunction1();
+extern "C" void ASMfunction2(Point *pointPtr);
+
+
+struct MyStruct
 {
-	int i = 0;
-	while (i < size)
-	{
-		*(arr + i) = i;
-		i++;
-	}
-}
+	char c;   // 48    (4 byte) - offset 0
+	int i;    // 4C-4F (4 byte) - offset 4
+	short s;  // 50-51 (8 byte) - offset 8
+	double d; // 58-5F (8 byte) - offset 16
+	// total - 24 byte
+};
 
-extern "C" void ASMfunction5(uint64_t * arr, uint64_t size);
-void Cppfunction5(uint64_t* arr, uint64_t size)
+#pragma pack(1)
+struct MyStructPacked
 {
-	int i = 0;
-	do 
-	{
-		*(arr + i) = i;
-		i++;
-	} while (i < size);
-}
-
-extern "C" void ASMfunction6(uint64_t * arr, uint64_t size);
-
-void printArr(uint64_t* arr, uint64_t size)
-{
-	for (int i = 0; i < size; i++)
-	{
-		std::cout<<*(arr+i)<<" | ";
-	}
-	std::cout << std::endl;
-}
+	char c;   
+	int i;    
+	short s;  
+	double d; 
+};
 
 int main()
 {
-	uint64_t a = 10;
-	uint64_t b = 20;
+	Point* pointPtr = ASMfunction1();
+	std::cout << pointPtr->x << std::endl;
+	std::cout << pointPtr->y << std::endl;
 
-	std::cout << ASMfunction1(a, b) << std::endl;
-	std::cout << ASMfunction2(a, b) << std::endl;
-	std::cout << Cppfunction1(a, b) << std::endl;
+	Point point;
+	ASMfunction2(&point);
+	std::cout << point.x << std::endl;
+	std::cout << point.y << std::endl;
 
-	std::cout << ASMfunction3(a, b) << std::endl;
-	std::cout << Cppfunction3(a, b) << std::endl;
+	MyStruct str;
+	std::cout << &str << std::endl;
+	std::cout << &(str.i) << std::endl;
+	std::cout << &(str.s) << std::endl;
+	std::cout << &(str.d) << std::endl;
 
-	const uint64_t size = 20;
-	uint64_t arr1[size];
-	uint64_t arr2[size];
-
-	Cppfunction4(arr1, size);
-	printArr(arr1, size);
-	ASMfunction4(arr2, size);
-	printArr(arr2, size);
-
-	uint64_t arr3[size];
-	uint64_t arr4[size];
-	Cppfunction5(arr3, size);
-	printArr(arr3, size);
-	ASMfunction5(arr4, size);
-	printArr(arr4, size);
-
-	uint64_t arr5[size];
-	ASMfunction6(arr5, size);
-	printArr(arr5, size);
+	std::cout << sizeof(MyStruct) << std::endl;
+	std::cout<<sizeof(MyStructPacked) << std::endl;
 
 	return 0;
 }
